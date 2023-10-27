@@ -1,93 +1,3 @@
-//Abstraction
-
-/*
-Abstraction in JavaScript refers to the concept of simplifying complex systems 
-by representing them in a more manageable and understandable way. It involves 
-hiding unnecessary details and exposing only the essential features and 
-functionalities. 
-*/
-
-class Car {
-    constructor({
-        model,
-        brand,
-        year
-    }) {
-        this.model = model;
-        this.brand = brand;
-        this.year = year;
-    }
-};
-const newCar = new Car({
-    model: "XD",
-    brand: "Scion",
-    year: "2007",
-})
-
-console.log(newCar);
-
-/* 
-Encapsulation
-
-Encapsulation in JavaScript is achieved by using private variables and
-private methods within a class. While JavaScript doesn't provide native 
-support for encapsulation like some object-oriented languages, private 
-variables and methods can be simulated using scoping techniques and naming 
-conventions
- */
-class Car2 {
-    constructor({
-        brand,
-        model
-    }) {
-        // Private variables (simulated with naming conventions)
-        this._brand = brand;
-        this._model = model;
-
-        // Public methods
-        this.getMake = function () {
-            return this._brand;
-        };
-
-        this.getModel = function () {
-            return this._model;
-        };
-
-        this.setMake = function (newBrand) {
-            this._brand = newBrand;
-        };
-
-        this.setModel = function (newModel) {
-            this._model = newModel;
-        };
-    }
-}
-
-const myCar = new Car2({
-    brand: "Toyota",
-    model: "Camry"
-});
-
-// Accessing private variables through public methods
-console.log(`Make: ${myCar.getMake()}`); 
-console.log(`Model: ${myCar.getModel()}`);
-
-// Modifying private variables through public methods
-myCar.setMake("Honda");
-myCar.setModel("Accord");
-
-console.log(`Make: ${myCar.getMake()}`); 
-console.log(`Model: ${myCar.getModel()}`);
-
-/*
-Inheritance
-
-In JavaScript, "inheritance" refers to the mechanism by which an object
-or class can inherit properties and methods from another object or class.
-This allows for code reuse and the creation of hierarchies of related objects.
-*/
-
-
 class Transport {
     constructor({
         brand,
@@ -172,3 +82,36 @@ newAirplane.fly();
 
 
 
+// Escuchar el evento de envío del formulario
+document.getElementById("transportForm").addEventListener("submit", function (e) {
+    e.preventDefault();
+    
+    // Obtener los valores de los campos del formulario
+    const transportType = document.getElementById("transportType").value;
+    const brand = document.getElementById("brand").value;
+    const model = document.getElementById("model").value;
+    const electric = document.getElementById("electric").checked;
+    const year = parseInt(document.getElementById("year").value);
+
+    let transport;
+
+    if (transportType === "Automobile") {
+        const wheels = parseInt(document.getElementById("wheels").value);
+        transport = new Automobile({ brand, model, electric, year, wheels });
+    } else if (transportType === "Airplane") {
+        const engines = parseInt(document.getElementById("engines").value);
+        transport = new Airplane({ brand, model, electric, year, engines });
+    }
+
+    // Obtener la lista de transportes del almacenamiento local (si existe)
+    let transports = JSON.parse(localStorage.getItem("transports")) || [];
+    
+    // Agregar el nuevo transporte al arreglo
+    transports.push(transport);
+
+    // Guardar el arreglo actualizado en el almacenamiento local
+    localStorage.setItem("transports", JSON.stringify(transports));
+
+    // Limpiar el formulario
+    document.getElementById("transportForm").reset();
+});
